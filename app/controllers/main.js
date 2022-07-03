@@ -117,14 +117,8 @@ function addUser() {
 
   // Gọi API thêm user
   apiAddUser(user).then(function (result) {
-    switch (isValid) {
-      case "true":
-        main();
-        resetForm();
-        break;
-      case "false":
-        return;
-    }
+    main();
+    resetForm();
   });
 }
 
@@ -190,6 +184,7 @@ function resetForm() {
       $("#myModal").modal("hide");
       break;
   }
+
 }
 
 // Thay đổi nội dung modal
