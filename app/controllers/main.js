@@ -101,7 +101,7 @@ function addUser() {
   var language = document.getElementById("loaiNgonNgu").value;
   var description = document.getElementById("MoTa").value;
 
-  var isValid = validation()
+  var isValid = validation();
   // Khởi tạo đối tượng User
   var user = new User(
     "", // do bạn truyền thiếu id nè => ok rồi đó ok nhé
@@ -117,8 +117,14 @@ function addUser() {
 
   // Gọi API thêm user
   apiAddUser(user).then(function (result) {
-    main();
-    resetForm();
+    switch (isValid) {
+      case "true":
+        main();
+        resetForm();
+        break;
+      case "false":
+        return;
+    }
   });
 }
 
@@ -141,7 +147,7 @@ function updateUser() {
   var language = document.getElementById("loaiNgonNgu").value;
   var description = document.getElementById("MoTa").value;
 
-  var isValid = validation()
+  var isValid = validation();
   // Khởi tạo đối tượng User
   var user = new User(
     id,
@@ -174,8 +180,16 @@ function resetForm() {
   document.getElementById("loaiNgonNgu").value = "";
   document.getElementById("MoTa").value = "";
 
+  var isValid = validation();
   // Đóng modal
-  $("#myModal").modal("hide");
+  switch (isValid) {
+    case "false":
+      $("#myModal").modal("show");
+      break;
+    case "true":
+      $("#myModal").modal("hide");
+      break;
+  }
 }
 
 // Thay đổi nội dung modal
@@ -286,7 +300,7 @@ function handleSearch(evt) {
         user.description
       );
     }
-    var isValid = validation()
+    var isValid = validation();
     // Gọi hàm display
     display(users);
   });
@@ -310,38 +324,36 @@ function validation() {
   var language = document.getElementById("loaiNgonNgu").value;
   var description = document.getElementById("MoTa").value;
 
- 
   var isValid = true;
 
   // Kiểm tra input tài khoản
   if (!isRequired(account)) {
     isValid = false;
-    document.getElementById(
-      "accountInput"
-    ).innerHTML = 'Tài khoản không được để trống ';
+    document.getElementById("accountInput").innerHTML =
+      "Tài khoản không được để trống ";
   }
 
   // Kiểm tra input tên
   var nameTest = new RegExp("^[A-Za-z] +$");
   if (!isRequired(name)) {
     isValid = false;
-    document.getElementById(
-      "nameInput"
-    ).innerHTML = 'Tên không được để trống';
+    document.getElementById("nameInput").innerHTML = "Tên không được để trống";
   } else if (!nameTest.test(name)) {
     isValid = false;
     document.getElementById("nameInput").innerHTML =
-      'Tên không được bao gồm số hay các ký tự đặc biệt';
+      "Tên không được bao gồm số hay các ký tự đặc biệt";
   }
 
   // Kiểm tra input email
   var mailTest = new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
   if (!isRequired(email)) {
     isValid = false;
-    document.getElementById("emailInput").innerHTML = 'Email không được để trống';
+    document.getElementById("emailInput").innerHTML =
+      "Email không được để trống";
   } else if (!mailTest.test(email)) {
     isValid = false;
-    document.getElementById("emailInput").innerHTML = 'Email không đúng định dạng';
+    document.getElementById("emailInput").innerHTML =
+      "Email không đúng định dạng";
   }
 
   // Kiểm tra input mật khẩu
@@ -351,44 +363,44 @@ function validation() {
   if (!isRequired(password)) {
     isValid = false;
     document.getElementById("passwordInput").innerHTML =
-      'Mật khẩu không được để trống';
+      "Mật khẩu không được để trống";
   } else if (!passTest.test(password)) {
     isValid = false;
     document.getElementById("passwordInput").innerHTML =
-      'Mật Khẩu phải từ 6-10 ký tự (chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt)';
-  };
+      "Mật Khẩu phải từ 6-10 ký tự (chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt)";
+  }
 
   // Kiểm tra input hình ảnh
   if (!isRequired(image)) {
     isValid = false;
     document.getElementById("imageInput").innerHTML =
-    'Hình ảnh không được để trống';
-  };
+      "Hình ảnh không được để trống";
+  }
 
   // Kiểm tra input loại người dùng
   if (!isRequired(type)) {
     isValid = false;
-    document.getElementById("typeInput").innerHTML = 'Loại người dùng không được để trống';
+    document.getElementById("typeInput").innerHTML =
+      "Loại người dùng không được để trống";
   }
 
   // Kiểm tra input ngôn ngữ
   if (!isRequired(language)) {
     isValid = false;
     document.getElementById("languageInput").innerHTML =
-    'Ngôn ngữ không được để trống';
-  };
+      "Ngôn ngữ không được để trống";
+  }
 
   // Kiểm tra input mô tả
   var descriptionTest = new RegExp("^[A-Za-z]{0,60} +$");
   if (!isRequired(description)) {
     isValid = false;
     document.getElementById("descriptionInput").innerHTML =
-      'Mô tả không được để trống';
+      "Mô tả không được để trống";
   } else if (!descriptionTest.test(description)) {
     isValid = false;
-    document.getElementById("descriptionInput").innerHTML =
-      'Tối đa 60 ký tự';
-  };
+    document.getElementById("descriptionInput").innerHTML = "Tối đa 60 ký tự";
+  }
 
   return isValid;
 }
